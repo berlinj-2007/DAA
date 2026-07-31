@@ -1,0 +1,89 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOcmlreMNprFW5jgMl2D5QY",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/berlinj-2007/DAA/blob/main/Experiment-6\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "rms9J9U2gEMg",
+        "outputId": "238b8205-3a0d-435a-b3ae-d0ce8bf6fde6"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Minimum number of multiplications: 4500\n"
+          ]
+        }
+      ],
+      "source": [
+        "def matrix_chain_order(p):\n",
+        "    \"\"\"\n",
+        "    p = list of matrix dimensions\n",
+        "    Example:\n",
+        "    If matrices are:\n",
+        "    A1 = 10x30\n",
+        "    A2 = 30x5\n",
+        "    A3 = 5x60\n",
+        "    Then p = [10, 30, 5, 60]\n",
+        "    \"\"\"\n",
+        "\n",
+        "    n = len(p) - 1  # Number of matrices\n",
+        "\n",
+        "    # Create DP table\n",
+        "    dp = [[0 for _ in range(n)] for _ in range(n)]\n",
+        "\n",
+        "    # l = chain length\n",
+        "    for l in range(2, n + 1):\n",
+        "        for i in range(n - l + 1):\n",
+        "            j = i + l - 1\n",
+        "            dp[i][j] = float('inf')\n",
+        "\n",
+        "            # Try every possible split\n",
+        "            for k in range(i, j):\n",
+        "                cost = (dp[i][k] +\n",
+        "                        dp[k + 1][j] +\n",
+        "                        p[i] * p[k + 1] * p[j + 1])\n",
+        "\n",
+        "                if cost < dp[i][j]:\n",
+        "                    dp[i][j] = cost\n",
+        "\n",
+        "    return dp[0][n - 1]\n",
+        "\n",
+        "\n",
+        "# Driver code\n",
+        "dimensions = [10, 30, 5, 60]\n",
+        "print(\"Minimum number of multiplications:\", matrix_chain_order(dimensions))"
+      ]
+    }
+  ]
+}
